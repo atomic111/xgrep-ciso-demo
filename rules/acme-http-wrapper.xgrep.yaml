@@ -1,0 +1,34 @@
+# Acme custom rule — organization-specific SDLC policy.
+#
+# Acme requires all outbound HTTP to go through the vetted `acme_http` client
+# (which enforces the egress allowlist, timeouts, and TLS pinning). Calling the
+# `requests` library directly bypasses those controls, so flag it. This shows
+# how a security team encodes its OWN policy on top of xgrep's built-in rules.
+rules:
+  - id: acme-direct-requests-usage
+    languages: [python]
+    severity: WARNING
+    message: >-
+      Acme SDLC policy: outbound HTTP must use the vetted `acme_http` client,
+      which enforces the egress allowlist, request timeouts, and TLS pinning.
+      Calling `requests` directly bypasses those controls. Replace this with
+      `acme_http.get(...)` / `acme_http.post(...)`.
+    metadata:
+      category: security
+      confidence: HIGH
+      cwe:
+        - "CWE-1104: Use of Unmaintained Third Party Components"
+      owasp:
+        - "A08:2021 - Software and Data Integrity Failures"
+      references:
+        - https://wiki.acme.internal/security/egress-policy
+    fix-hint: >-
+      Route the call through the approved `acme_http` wrapper instead of using
+      the `requests` library directly.
+    patterns:
+      - pattern-either:
+          - pattern: requests.get(...)
+          - pattern: requests.post(...)
+          - pattern: requests.put(...)
+          - pattern: requests.delete(...)
+          - pattern: requests.request(...)

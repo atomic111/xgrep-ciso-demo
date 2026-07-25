@@ -1,0 +1,22 @@
+# Never commit Mondoo credentials or any service account
+mondoo.yml
+mondoo*.json
+*serviceaccount*.json
+.mondoo/
+
+# Scan artifacts / reports (generated in CI)
+*.sarif
+results.sarif
+gl-sast-report.json
+report/site/
+report/*.json
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+*.sqlite
+
+# OS / editor
+.DS_Store
