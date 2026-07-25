@@ -1,0 +1,11 @@
+{
+  "name": "xgrep-fix",
+  "version": "1.0.0",
+  "description": "Fix a whole set of xgrep findings — or just the triage-confirmed true positives in a findings.json — in one pass: auto-apply deterministic fixes (fix --confirmed), drive the assisted author/verify/apply loop, and surface advisory guidance, all through the verify/apply harness",
+  "author": {
+    "name": "Mondoo, Inc."
+  },
+  "repository": "https://github.com/mondoohq/xgrep",
+  "license": "Apache-2.0",
+  "keywords": ["xgrep", "semgrep", "sast", "security", "remediation", "autofix", "batch", "triage"]
+}

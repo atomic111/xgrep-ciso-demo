@@ -1,0 +1,11 @@
+{
+  "name": "xgrep-rule-creator",
+  "version": "1.0.0",
+  "description": "Create custom xgrep rules for detecting security vulnerabilities and code patterns with test-first methodology",
+  "author": {
+    "name": "Mondoo, Inc."
+  },
+  "repository": "https://github.com/mondoohq/xgrep",
+  "license": "Apache-2.0",
+  "keywords": ["xgrep", "semgrep", "sast", "security", "rules", "static-analysis"]
+}

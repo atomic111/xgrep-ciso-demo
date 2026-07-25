@@ -1,0 +1,11 @@
+{
+  "name": "xgrep-remediate",
+  "version": "1.0.0",
+  "description": "Fix a confirmed xgrep finding safely using the verify/apply harness — apply deterministic fixes, author and verify assisted fixes against the fix contract, and surface advisory guidance",
+  "author": {
+    "name": "Mondoo, Inc."
+  },
+  "repository": "https://github.com/mondoohq/xgrep",
+  "license": "Apache-2.0",
+  "keywords": ["xgrep", "semgrep", "sast", "security", "remediation", "autofix"]
+}

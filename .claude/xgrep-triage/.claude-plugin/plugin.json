@@ -1,0 +1,11 @@
+{
+  "name": "xgrep-triage",
+  "version": "1.0.0",
+  "description": "Investigate and classify xgrep scan findings using code graph analysis",
+  "author": {
+    "name": "Mondoo, Inc."
+  },
+  "repository": "https://github.com/mondoohq/xgrep",
+  "license": "Apache-2.0",
+  "keywords": ["xgrep", "semgrep", "sast", "security", "triage", "code-graph"]
+}

@@ -1,0 +1,11 @@
+{
+  "name": "xgrep-inspect",
+  "version": "1.0.0",
+  "description": "Navigate and understand source code using xgrep's AST-powered code intelligence",
+  "author": {
+    "name": "Mondoo, Inc."
+  },
+  "repository": "https://github.com/mondoohq/xgrep",
+  "license": "Apache-2.0",
+  "keywords": ["xgrep", "code-intelligence", "code-navigation", "symbol-search", "code-graph", "impact-analysis"]
+}

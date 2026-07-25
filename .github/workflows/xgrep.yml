@@ -1,0 +1,53 @@
+# xgrep SAST + secrets + dependency (SCA) scan.
+#
+# On every push to main and every pull request this:
+#   1. runs xgrep (diff-aware on PRs, full-tree on push),
+#   2. uploads SARIF to GitHub Code Scanning (Security tab),
+#   3. publishes findings to Mondoo Platform (because MONDOO_CONFIG_BASE64 is
+#      set) — code, secrets, and dependency CVEs all land on the repo asset.
+#
+# Reporting to Mondoo is automatic whenever the service account is present; it
+# is best-effort and never fails the build. See docs/CISO-GUIDE.md.
+name: xgrep
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+  security-events: write   # required to upload SARIF to Code Scanning
+
+jobs:
+  scan:
+    name: xgrep security scan
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0   # full history so diff-aware PR scans have a baseline
+
+      - name: Install xgrep
+        run: npm install -g @mondoohq/xgrep
+
+      - name: Scan (code + secrets + dependencies) → SARIF, report to Mondoo
+        env:
+          # Base64-encoded Mondoo service-account config. Set once as a repo
+          # secret; xgrep detects it and reports findings to the space.
+          MONDOO_CONFIG_BASE64: ${{ secrets.MONDOO_CONFIG_BASE64 }}
+        run: |
+          xgrep ci \
+            --rules rules \
+            --with-builtin security,secrets \
+            --decode \
+            -o results.sarif
+        # `xgrep ci` exits 0 even with findings, so the SARIF upload below always
+        # runs. Flip to `--error` here once the backlog is triaged to gate PRs.
+
+      - name: Upload SARIF to GitHub Code Scanning
+        if: always()   # upload even if the scan step surfaced findings
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: results.sarif
+          category: xgrep

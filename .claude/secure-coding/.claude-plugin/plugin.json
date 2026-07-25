@@ -1,0 +1,11 @@
+{
+  "name": "secure-coding",
+  "version": "1.0.0",
+  "description": "Secure coding guidance for AI agents - proactively avoid generating vulnerable code patterns across 7 languages",
+  "author": {
+    "name": "Mondoo, Inc."
+  },
+  "repository": "https://github.com/mondoohq/xgrep",
+  "license": "Apache-2.0",
+  "keywords": ["security", "secure-coding", "vulnerability-prevention", "sast", "owasp", "cwe"]
+}

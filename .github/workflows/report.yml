@@ -1,0 +1,73 @@
+# Build the CISO-facing HTML security dashboard and publish it to GitHub Pages.
+#
+# Runs a full scan (code + secrets + dependency CVEs) as JSON, renders a
+# self-contained HTML report with report/gen_report.py, and deploys it to
+# Pages. The live dashboard URL is printed in the job summary.
+name: security-report
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Build security dashboard
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install xgrep
+        run: npm install -g @mondoohq/xgrep
+
+      - name: Full scan → JSON (code + secrets + dependencies)
+        env:
+          MONDOO_CONFIG_BASE64: ${{ secrets.MONDOO_CONFIG_BASE64 }}
+        run: |
+          xgrep scan . \
+            --rules rules \
+            --with-builtin security,secrets \
+            --decode \
+            --json -o scan.json
+        # scan exits non-zero when findings exist; don't let that stop the build.
+        continue-on-error: true
+
+      - name: Render CISO dashboard
+        run: |
+          mkdir -p report/site
+          python3 report/gen_report.py scan.json report/site/index.html \
+            --repo "${{ github.repository }}" \
+            --branch "${{ github.ref_name }}" \
+            --commit "${{ github.sha }}" \
+            --space "//captain.api.mondoo.app/spaces/bold-rubin-524886" \
+            --xgrep-version "$(xgrep version | head -1 | awk '{print $2}')"
+          echo "### 📊 Security dashboard built" >> "$GITHUB_STEP_SUMMARY"
+          echo "Findings: $(python3 -c 'import json;print(len(json.load(open("scan.json"))["results"]))')" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: report/site
+
+  deploy:
+    name: Deploy to GitHub Pages
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy
+        id: deployment
+        uses: actions/deploy-pages@v4
