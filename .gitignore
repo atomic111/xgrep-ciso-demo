@@ -20,3 +20,6 @@ venv/
 
 # OS / editor
 .DS_Store
+
+# xgrep local cache
+.xgrep/

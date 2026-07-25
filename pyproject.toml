@@ -1,0 +1,24 @@
+[tool.poetry]
+name = "acme-devops-toolkit"
+version = "0.1.0"
+description = "Acme DevOps Toolkit — intentionally vulnerable demo service for xgrep"
+authors = ["Acme Platform Security <secops@acme.example>"]
+
+# NOTE: dependency versions are pinned OLD ON PURPOSE. xgrep reads the resolved
+# versions from poetry.lock and checks them against Mondoo's vulnerability
+# database (MVD), reporting known CVEs and End-of-Life packages. Do not bump
+# them — the outdated pins are the demo.
+[tool.poetry.dependencies]
+python = "^3.9"
+flask = "0.12.2"
+werkzeug = "0.14.1"
+jinja2 = "2.10"
+requests = "2.19.1"
+urllib3 = "1.24.1"
+pyyaml = "5.1"
+pyjwt = "1.5.0"
+cryptography = "2.3"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

@@ -1,14 +1,15 @@
-# Acme DevOps Toolkit dependencies.
+# Acme DevOps Toolkit dependencies (kept in sync with poetry.lock).
 #
-# These versions are pinned OLD ON PURPOSE so xgrep's dependency scan (SCA)
-# reports known CVEs and End-of-Life packages against Mondoo's vulnerability
-# database. Do not "fix" them by bumping — the outdated pins are the demo.
+# Versions are pinned OLD ON PURPOSE so xgrep's dependency scan (SCA) reports
+# known CVEs and End-of-Life packages against Mondoo's vulnerability database.
+# xgrep reads the *resolved* versions from poetry.lock; this file mirrors them
+# for readers who don't use Poetry. Do not bump — the outdated pins are the demo.
 
-Flask==1.1.2            # EOL Flask 1.x; multiple advisories in the 1.x line
-Werkzeug==0.15.5        # CVE-2019-14806 and others; very old
-Jinja2==2.10.1          # CVE-2019-10906 (sandbox escape), CVE-2020-28493 (ReDoS)
-requests==2.19.1        # CVE-2018-18074 (credential leak on redirect)
-PyYAML==5.1             # CVE-2020-1747 / CVE-2020-14343 (arbitrary code exec via load)
-urllib3==1.24.1         # CVE-2019-11324, CVE-2019-11236
-PyJWT==1.5.0            # CVE-2017-11424 / algorithm-confusion era
-cryptography==2.3       # multiple CVEs; long EOL
+Flask==0.12.2
+Werkzeug==0.14.1
+Jinja2==2.10
+requests==2.19.1
+urllib3==1.24.1
+PyYAML==5.1
+PyJWT==1.5.0
+cryptography==2.3
