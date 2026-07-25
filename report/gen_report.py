@@ -153,7 +153,7 @@ def build(data: dict, args) -> str:
     space = args.space or ""
     space_name = space.rsplit("/", 1)[-1] if space else ""
     space_link = (
-        f'<a href="https://console.mondoo.com/space?spaceId={esc(space_name)}">{esc(space_name)}</a>'
+        f'<a href="https://app.mondoo.com/space/overview?spaceId={esc(space_name)}&region=US">{esc(space_name)}</a>'
         if space_name
         else "—"
     )
