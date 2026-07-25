@@ -14,6 +14,12 @@ on:
   push:
     branches: [main]
   pull_request:
+  workflow_dispatch:      # run manually from the Actions tab
+    inputs:
+      fail_on_findings:
+        description: "Fail the run if findings exist (gate)"
+        type: boolean
+        default: false
 
 permissions:
   contents: read
@@ -41,6 +47,7 @@ jobs:
             --rules rules \
             --with-builtin security,secrets \
             --decode \
+            ${{ (github.event_name == 'workflow_dispatch' && inputs.fail_on_findings) && '--error' || '' }} \
             -o results.sarif
         # `xgrep ci` exits 0 even with findings, so the SARIF upload below always
         # runs. Flip to `--error` here once the backlog is triaged to gate PRs.
