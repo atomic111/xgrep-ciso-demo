@@ -55,6 +55,11 @@ jobs:
           echo "### 📊 Security dashboard built" >> "$GITHUB_STEP_SUMMARY"
           echo "Findings: $(python3 -c 'import json;print(len(json.load(open("scan.json"))["results"]))')" >> "$GITHUB_STEP_SUMMARY"
 
+      - name: Publish product-metrics mockup alongside the report
+        run: |
+          cp report/product-dashboard.html report/site/product-dashboard.html
+          echo "Product dashboard mockup: product-dashboard.html" >> "$GITHUB_STEP_SUMMARY"
+
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
