@@ -186,11 +186,13 @@ function renderTiles(d){
   const npts=openSeries.length;
   const mNow=parseFloat(t.mttr), mWas=parseFloat(t.mttrWas);
   const mttrSeries=Array.from({length:npts},(_,i)=>mWas+(mNow-mWas)*(i/(npts-1)));
+  // cumulative blocked-in-PR: a running total that rises to the headline figure
+  let _c=0; const blockedCum=d.introduced.map(v=>_c+=v);
   const tiles=[
     {k:'Open Critical + High',v:t.riskNow,d:`<span class="down">▼ ${drop}%</span> from ${t.riskWas}`,spark:sparkline(openSeries,C.ok)},
     {k:'MTTR (all sev.)',v:t.mttr+'d',d:`<span class="down">▼</span> from ${t.mttrWas}d`,spark:sparkline(mttrSeries,C.uv)},
     {k:'Precision (true-positive)',v:pct(t.prec),d:`${t.fp} false positives auto-filtered`,spark:sparkline([88,90,91,92,93,t.prec].slice(-openSeries.length),C.ok)},
-    {k:'Blocked in PR',v:t.blocked,d:'exploitable issues never hit main',spark:sparkline(d.introduced,C.high)},
+    {k:'Blocked in PR',v:t.blocked,d:'exploitable issues never hit main',spark:sparkline(blockedCum,C.high)},
     {k:'Autofix verified',v:pct(t.autofix),d:'fixed by Claude, proven by re-scan',spark:sparkline([52,58,61,64,66,t.autofix].slice(-openSeries.length),C.uv)},
     {k:'Developer time saved',v:t.hours+'h',d:`PR cycle time <span class="down">▼ ${t.cycle}%</span>`,spark:sparkline(d.resolved,C.ok)},
   ];
