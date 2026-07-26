@@ -17,6 +17,7 @@ from app.proxy import bp as proxy_bp
 from app.reports import bp as reports_bp
 from app.plugins import bp as plugins_bp
 from app.accounts import bp as accounts_bp
+from app.notifications import bp as notifications_bp
 from app import config
 
 
@@ -28,6 +29,7 @@ def create_app() -> Flask:
     app.register_blueprint(reports_bp)
     app.register_blueprint(plugins_bp)
     app.register_blueprint(accounts_bp)
+    app.register_blueprint(notifications_bp)
     return app
 
 
