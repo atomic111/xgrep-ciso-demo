@@ -183,9 +183,12 @@ function renderTiles(d){
   const critHighNow=d.sev.crit[d.sev.crit.length-1]+d.sev.high[d.sev.high.length-1];
   const drop=Math.round((1-t.riskNow/t.riskWas)*100);
   const openSeries=d.sev.crit.map((c,i)=>c+d.sev.high[i]);
+  const npts=openSeries.length;
+  const mNow=parseFloat(t.mttr), mWas=parseFloat(t.mttrWas);
+  const mttrSeries=Array.from({length:npts},(_,i)=>mWas+(mNow-mWas)*(i/(npts-1)));
   const tiles=[
     {k:'Open Critical + High',v:t.riskNow,d:`<span class="down">▼ ${drop}%</span> from ${t.riskWas}`,spark:sparkline(openSeries,C.ok)},
-    {k:'MTTR (all sev.)',v:t.mttr+'d',d:`<span class="down">▼</span> from ${t.mttrWas}d`,spark:sparkline([...openSeries].reverse(),C.uv)},
+    {k:'MTTR (all sev.)',v:t.mttr+'d',d:`<span class="down">▼</span> from ${t.mttrWas}d`,spark:sparkline(mttrSeries,C.uv)},
     {k:'Precision (true-positive)',v:pct(t.prec),d:`${t.fp} false positives auto-filtered`,spark:sparkline([88,90,91,92,93,t.prec].slice(-openSeries.length),C.ok)},
     {k:'Blocked in PR',v:t.blocked,d:'exploitable issues never hit main',spark:sparkline(d.introduced,C.high)},
     {k:'Autofix verified',v:pct(t.autofix),d:'fixed by Claude, proven by re-scan',spark:sparkline([52,58,61,64,66,t.autofix].slice(-openSeries.length),C.uv)},
